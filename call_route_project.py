@@ -13,9 +13,14 @@
 # then use this string variable we created to map to the correct value in the dictionary
 
 def read_words(filename):
+    '''takes in a text file and returns an array of strings'''
     return [line.strip() for line in open(filename)]
 
 def create_dict(word_list):
+    '''takes in an array of strings, and returns a dictionary of
+    key - router number
+    value - price
+    runtime: O(n) where n is the number of the router_price in the word_list'''
     dict = {}
 
     for str in word_list:
@@ -26,22 +31,27 @@ def create_dict(word_list):
     return dict
 
 def firstSolution(number):
+    '''
+    runtime: O(n) where n is the number of key-value pairs in the dictionary'''
+
+    # arrayRoutes = read_words('route-costs-106000.txt')
     arrayRoutes = read_words('route-costs-10.txt')
     dictRoutes = create_dict(arrayRoutes)
 
-    print("arrayRoutes")
-    print(arrayRoutes)
-    print("\ndictRoutes")
-    print(dictRoutes)
-
     lowest_price = 100.00
+    longNumber = number
     for router in dictRoutes.keys():
-        if router in number:
+        if longNumber.startswith(router):
             if float(dictRoutes[router]) < lowest_price:
                 lowest_price = float(dictRoutes[router])
+    if lowest_price == 100.00:
+        return None
     return lowest_price
 
+def main():
+    print(firstSolution('+449275049'))      # 0.49
+    print(firstSolution('+861532344'))      # 0.84
+    print(firstSolution('+1718428566'))     # None
 
 if __name__ == '__main__':
-    print(firstSolution('+449275049'))
-    print(firstSolution('+14105547746'))
+    main()
