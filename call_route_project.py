@@ -12,6 +12,11 @@
 #   - if it's not, continue
 # then use this string variable we created to map to the correct value in the dictionary
 
+def firstSolution(number):
+    '''use the cmd+f in our file to find the prefix the number's prefix'''
+
+
+
 def read_words(filename):
     '''takes in a text file and returns an array of strings'''
     return [line.strip() for line in open(filename)]
@@ -30,7 +35,7 @@ def create_dict(word_list):
 
     return dict
 
-def firstSolution(number):
+def secondSolution(number):
     '''
     runtime: O(n) where n is the number of key-value pairs in the dictionary'''
 
@@ -48,10 +53,14 @@ def firstSolution(number):
         return None
     return lowest_price
 
+
+def thirdSolution():
+    pass
+
 def main():
-    print(firstSolution('+449275049'))      # 0.49
-    print(firstSolution('+861532344'))      # 0.84
-    print(firstSolution('+1718428566'))     # None
+    print(secondSolution('+449275049'))      # 0.49
+    print(secondSolution('+861532344'))      # 0.84
+    print(secondSolution('+1718428566'))     # None
 
 if __name__ == '__main__':
     main()
