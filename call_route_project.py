@@ -17,6 +17,11 @@ def firstSolution(number):
 
 
 
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+
 def read_words(filename):
     '''takes in a text file and returns an array of strings'''
     return [line.strip() for line in open(filename)]
@@ -53,9 +58,18 @@ def secondSolution(number):
         return None
     return lowest_price
 
+
+
+
+
+
+
 # ------------------------------------------------------------------------------------------------------------------
 
 def turn_to_array_tuple(file_name):
+    '''turns a file into the number and price tuple
+    ex. [(8130, '0.68'), (86153, '0.32')]
+    '''
     router_price = []
     f = open(file_name)
     for line in f:
@@ -70,7 +84,9 @@ def turn_to_array_tuple(file_name):
     return router_price
 
 def turn_to_numbers(filename):
-    '''takes in a text file and returns an array of strings'''
+    '''takes in a text file and returns an array of strings
+    ex. [15124156620, 14152345678, ...]
+    '''
     numbers_list = []
     f = open(filename)
     for line in f:
@@ -80,32 +96,36 @@ def turn_to_numbers(filename):
     return numbers_list
 
 def binary_search_recursive(array, item, left=None, right=None):
-    # once implemented, change binary_search to call binary_search_recursive
-    # to verify that your recursive implementation passes all tests
-    if right == None:                   # instantiating for the first iteration
+    '''returns the price in the router array of tuples, if the router number is the prefix of our number
+    ex. returns either None, or 0.05 which is the price of the found router number
+    '''
+    if right == None:
         left = 0
         right = len(array) - 1
-    elif left > right:                  # will end if the recursion has gon too far (intersecting)
+    elif left > right:
         return None
     middleIndex = (left + right) // 2
-    middleVal = array[middleIndex][0]
+    middleVal = array[middleIndex][0]       # middleVal is the firdst item in the tuple (router number)
     if middleVal == item:
-        return array[middleIndex][1]
-    if middleVal < item:                # need to search in the right side of array
+        return array[middleIndex][1]        # returning the price of the matched router number
+    if middleVal < item:                    # need to search in the right side of array
         left = middleIndex + 1
-    elif middleVal > item:              # need to search in the left side of array
+    elif middleVal > item:                  # need to search in the left side of array
         right = middleIndex - 1
 
     return binary_search_recursive(array, item, left, right)
 
 
 def third_solution():
-    '''Binary search'''
+    '''Implementing binary search
+    currently returns an array of [number, costToCall]
+    ex. [['+14237515032', '0.05'], ['+14815535238', 0], ['+14235244135', '0.05']]
+    '''
     # Create an array of tuples from the router costs
-    list_numbers = turn_to_numbers('phone-numbers-1000.txt')
+    list_numbers = turn_to_numbers('phone-numbers-100.txt')
     array_tuples = turn_to_array_tuple('route-costs-106000.txt')        # [(86153, '0.84'), ...]
 
-    # TODO: create text file as follows: +8615345522316,0.84
+    # todo: create text file as follows: +8615345522316,0.84
     #                                   +8130345522316,0.68
     #                                   +4491878473600,0.48
     #                                   +4452312234601, 0
@@ -116,22 +136,18 @@ def third_solution():
         curr_number = num
         while str(curr_number) != '':
             searched_num = binary_search_recursive(array_tuples, curr_number)
+            print(searched_num)
             if searched_num == None:
-                if str(curr_number) == '':
-                    break
                 cut_int = str(curr_number)[:-1]
                 if cut_int == '':
+                    final_array.append([('+'+str(num)), 0])
                     break
                 curr_number = int(cut_int)
-                # num[:-1]
             else:
                 final_array.append([('+'+str(num)), searched_num])
                 break
 
-        final_array.append([('+'+str(num)), 0])
-        
     return final_array
-
 
 
 def main():
