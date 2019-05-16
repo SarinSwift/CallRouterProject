@@ -1,3 +1,5 @@
+from pprint import pprint
+
 
 class Router(object):
 
@@ -47,8 +49,8 @@ def main():
     router_dict = router.read_router_file('route-costs-10000000.txt')
     phone_list = router.read_phone_file('phone-numbers-1000.txt')
     for number in phone_list:
-        price_list.append(router.get_longest_prefix(router_dict, number))
-    pprint(price_list)
+        price_list.append([number, router.get_longest_prefix(router_dict, number)])
+    print(price_list)
 
 
 if __name__ == '__main__':
