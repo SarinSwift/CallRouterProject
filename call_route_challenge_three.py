@@ -1,53 +1,55 @@
 
+class Router(object):
 
-def read_words(filename):
-    '''takes in a text file and returns an array of strings'''
-    return [line.strip() for line in open(filename)]
+    def __init__(self):
 
-def create_dict(word_list):
-    '''takes in an array of strings, and returns a dictionary of
-    key - router number
-    value - price
-    runtime: O(n) where n is the number of the router_price in the word_list'''
-    dict = {}
+        self.shortest_router = 100
+        self.longest_router = 0
 
-    for str in word_list:
-        number = str[:-5]          # '+8130'
-        price = str[-4:]           # '0.32'
-        dict[number] = price
+    def read_router_file(self, filename):
+        router_dict = {}
+        f = open(filename)
+        for line in f:
+            line = line.strip().split(',')
+            router_dict[line[0]] = line[1]
+            if self.shortest_router > len(line[0]):
+                self.shortest_router = len(line[0])
+            if self.longest_router < len(line[0]):
+                self.longest_router = len(line[0])
 
-    return dict
+        f.close()
+        return router_dict
 
-def third_solution(number, dictRoutes):
-    '''
-    runtime: O(n) where n is the number of key-value pairs in the dictionary'''
-    
-    # - start with the longest number
-    # - create while loop while the lenght of the longestNumber is more than 0
-    # - check if that key is in dict.keys()
-    # - if it is, then we return the value in that dictionary
-    # - if it is'nt, we cut the last digit
-    #   - and then run it again on the same number until we find a value
-    longNumber = number
-    while len(longNumber) > 0:
-        if longNumber in dictRoutes.keys():
-            return dictRoutes[longNumber]
-        else:
-            longNumber = longNumber[:-1]
-    return None
+    def read_phone_file(self, filename):
+        return [line.strip() for line in open(filename)]
 
+    def get_longest_prefix(self, dict, number):
+        if len(number) > self.longest_router:
+            chop = len(number) - self.longest_router
+            number = number[:-chop]
 
+        while True:
+            if len(number) < self.shortest_router:
+                break
 
+            if number in dict:
+                return dict[number]
+            else:
+                number = number[:-1]
+
+# recursion
+# set initial phone # length to longest router
+# chop off phone # digits until length < shortest_router
 def main():
 
-    # arrayRoutes = read_words('route-costs-106000.txt')
-    arrayRoutes = read_words('route-costs-106000.txt')
-    dictRoutes = create_dict(arrayRoutes)
+    router = Router()
+    price_list = []
+    router_dict = router.read_router_file('route-costs-10000000.txt')
+    phone_list = router.read_phone_file('phone-numbers-1000.txt')
+    for number in phone_list:
+        price_list.append(router.get_longest_prefix(router_dict, number))
+    pprint(price_list)
 
-    arrayTup = []
-    for num in read_words('phone-numbers-1000.txt'):
-        arrayTup.append((num, third_solution(num, dictRoutes)))
-    print(arrayTup)
 
 if __name__ == '__main__':
     main()
